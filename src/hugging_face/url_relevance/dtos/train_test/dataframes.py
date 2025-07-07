@@ -1,9 +1,8 @@
-import pandas as pd
 from pydantic import BaseModel, ConfigDict
-
+import polars as pl
 
 class TrainTestDataframes(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    test: pd.DataFrame
-    train: pd.DataFrame
+    test: pl.DataFrame
+    train: pl.DataFrame
