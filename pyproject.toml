@@ -4,6 +4,8 @@ version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
+    "environs>=14.2.0",
+    "huggingface-hub>=0.33.2",
     "imbalanced-learn>=0.12.4",
     "matplotlib>=3.10.3",
     "polars>=1.31.0",

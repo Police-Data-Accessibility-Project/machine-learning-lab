@@ -10,6 +10,7 @@ from src.load import from_parquet
 from src.models.bag_of_words.constants import HF_URL
 from src.models.bag_of_words.data_structures.dataframe import BagOfWordsDataFrame
 from src.models.bag_of_words.format import format_bag_of_words
+from src.models.bag_of_words.model import BagOfWordsModelContainer
 from src.models.helpers import apply_train_test_split, report, fit_and_predict
 
 LOGISTIC_REGRESSION_MODEL = LogisticRegression(
@@ -22,6 +23,8 @@ LOGISTIC_REGRESSION_MODEL = LogisticRegression(
 def run():
 
     bow_df = BagOfWordsDataFrame(from_parquet(HF_URL))
+
+    permitted_terms = bow_df.term.unique().to_list()
 
     intermediate = format_bag_of_words(bow_df)
 
@@ -76,9 +79,17 @@ def run():
         probability_estimates=outputs.probability
     )
 
-    export.to_joblib(
-        obj=LOGISTIC_REGRESSION_MODEL,
+    path = export.to_joblib(
+        obj=BagOfWordsModelContainer(
+            model=LOGISTIC_REGRESSION_MODEL,
+            term_label_encoder=intermediate.term_encoder,
+            permitted_terms=permitted_terms
+        ),
         filename="logistic_regression_bag_of_words"
+    )
+    export.upload_to_huggingface(
+        path_in_repo=path,
+        model_name="logistic_regression_bag_of_words",
     )
 
 def get_indices(
