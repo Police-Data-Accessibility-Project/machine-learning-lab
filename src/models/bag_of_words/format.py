@@ -7,6 +7,9 @@ from src.models.bag_of_words.data_structures.intermediate import BagOfWordsInter
 import polars as pl
 
 def format_bag_of_words(bow_df: BagOfWordsDataFrame) -> BagOfWordsIntermediate:
+    # Drop url column
+
+
     url_encoder = LabelEncoder()
     term_encoder = LabelEncoder()
 
@@ -30,6 +33,8 @@ def format_bag_of_words(bow_df: BagOfWordsDataFrame) -> BagOfWordsIntermediate:
 
     # Convert tf_idf to one-hot encode
     one_hot_encoded = (bow_df.tf_idf > 0).cast(pl.UInt8)
+
+
 
 
     params = CSRMatrixParams(

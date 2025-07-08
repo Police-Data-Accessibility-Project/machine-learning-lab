@@ -5,6 +5,7 @@ from sklearn.calibration import CalibratedClassifierCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 
+from src import export
 from src.load import from_parquet
 from src.models.bag_of_words.constants import HF_URL
 from src.models.bag_of_words.data_structures.dataframe import BagOfWordsDataFrame
@@ -73,6 +74,11 @@ def run():
         y_test=tts.y_test,
         y_pred=outputs.pred,
         probability_estimates=outputs.probability
+    )
+
+    export.to_joblib(
+        obj=LOGISTIC_REGRESSION_MODEL,
+        filename="logistic_regression_bag_of_words"
     )
 
 def get_indices(
